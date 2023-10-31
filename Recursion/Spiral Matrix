@@ -1,42 +1,40 @@
-class Solution {
-    private:
-    vector<int> res;
-    
-    public:    
-    void dfs(int i, int j, vector<vector<int>>& matrix, vector<vector<int>>& visited, bool flag){
-        //if out of range, return
-        if(i == matrix.size() || j == matrix[0].size() || i < 0 || j < 0){
-            return;
+vector<int> spiralOrder(vector<vector<int>>& matrix) {
+        vector<int>ans;
+        int row=matrix.size();
+        int col=matrix[0].size();
+        int startingrow=0;
+        int startingcol=0;
+        int endingrow=row-1;
+        int endingcol=col-1;
+        int total=row*col;
+        int count=0;
+        while(count<total)
+        {
+           for(int i=startingcol;i<=endingcol && count<total;i++){
+             ans.push_back(matrix[startingrow][i]);
+               count++;
+           }
+           startingrow++;
+         
+
+             for(int i=startingrow;i<=endingrow && count<total;i++){
+             ans.push_back(matrix[i][endingcol]);
+              count++;
+           }
+           endingcol--;
+           
+
+             for(int i=endingcol;i>=startingcol && count<total;i--){
+             ans.push_back(matrix[endingrow][i]);
+              count++;
+           }
+           endingrow--;
+
+             for(int i=endingrow;i>=startingrow && count<total;i--){
+             ans.push_back(matrix[i][startingcol]);
+              count++;
+           }
+           startingcol++;
         }
-        //if already visited, return
-        if(visited[i][j] != 0){
-            return;
-        }
-        //taking the value to our result as well marking visited
-        res.push_back(matrix[i][j]);
-        visited[i][j]=1;
-        /*
-        flag true means we are coming from the bottom, i.e. outer layer done
-        give us priority over going to the right ;-;
-        */
-        if (flag==true){
-            dfs(i-1, j, matrix, visited, true);    //up
-            dfs(i, j+1, matrix, visited, false);   //right
-            dfs(i+1, j, matrix, visited, false);   //down
-            dfs(i, j-1, matrix, visited, false);   //left          
-        }else{
-            dfs(i, j+1, matrix, visited, false);   //right
-            dfs(i+1, j, matrix, visited, false);   //down
-            dfs(i, j-1, matrix, visited, false);   //left
-            dfs(i-1, j, matrix, visited, true);    //up    
-        }
+        return ans;
     }
-    
-    vector<int> spiralOrder(vector<vector<int>>& matrix) {
-        auto n = matrix.size();
-        auto m = matrix[0].size();
-        vector<vector<int>> visited {n,vector<int>(m, 0)};
-        dfs(0, 0, matrix, visited, false);
-        return res;
-    }
-}
